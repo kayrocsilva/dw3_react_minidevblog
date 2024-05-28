@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Login.module.css'
 import { useState, useEffect } from 'react'
-import { useUserAuthentication } from '../../hooks/userAuthentication'
+import { userAuthentication } from '../../hooks/userAuthentication'
 import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
@@ -9,12 +9,58 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
 
-    const { login, error: authError, loading } = useUserAuthentication()
+    const { login, error: authError, loading } = userAuthentication()
     const navigate = useNavigate()
 
+    const handlerSubmit = async (e) => {
+      e.prenventDefault()
+      setError('')
+      const user = {
+        email,
+        password
+      }
+      const res = await login(user)
+
+      console.table(res)
+      navigate('/post/create')
+    }
+    useEffect(() => {
+      if(authError){
+        setError(authError)
+      }
+    }, [authError])
     
   return (
-    <div>Login</div>
+    <div className={styles.login}>
+      <h1>Entrar no MiniBlogDev</h1>
+      <p>Entre no ambiente onde ideias viram codigos</p>
+      <form onSubmit={handlerSubmit}>
+        <label>
+          <span>E-mail:</span>
+          <input
+            type="email"
+            name="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Entre com seu e-mail"
+          />
+        </label>
+        <label>
+            <span>Senha: </span>
+            <input 
+            type="password"
+            name="password"
+            requiredvalue={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Entre com a sua senha"
+            />
+        </label>
+        {!loading && <button className="btn">Login</button>}
+        {loading && <button className="btn" disabled>Aguarde...</button>}
+        {error && <p className="error">{error}</p>}
+      </form>
+    </div>
   )
 }
 

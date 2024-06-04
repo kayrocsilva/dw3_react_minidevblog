@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "minidevblogicoma"
-  }
+    "default": "minidevblogicoma",
+    "n": "minideveblogkayrocs"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }
